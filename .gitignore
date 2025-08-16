@@ -1,0 +1,95 @@
+# -------------------------
+# OS / Editor junk
+# -------------------------
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# -------------------------
+# Python
+# -------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.python-version
+pip-wheel-metadata/
+.eggs/
+*.egg
+*.egg-info/
+build/
+dist/
+.tox/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.cache/
+coverage.xml
+.coverage
+.coverage.*
+htmlcov/
+
+# -------------------------
+# Environments
+# -------------------------
+.venv/
+venv/
+env/
+ENV/
+.conda/
+*.conda
+
+# -------------------------
+# Notebooks
+# -------------------------
+.ipynb_checkpoints/
+
+# -------------------------
+# Data & Models (keep dirs, not contents)
+# -------------------------
+data/
+models/
+!data/.gitkeep
+!models/.gitkeep
+
+# Common training outputs
+tb_logs/
+logs/
+checkpoints/
+artifacts/
+
+# Model files (large/binary)
+*.h5
+*.keras
+*.tflite
+*.onnx
+*.pth
+*.pt
+*.ckpt
+*.pb
+saved_model/
+*.pkl
+
+# -------------------------
+# Large archives
+# -------------------------
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.7z
+
+# -------------------------
+# Streamlit / Secrets
+# -------------------------
+.streamlit/secrets.toml
+.env
+.env.*
