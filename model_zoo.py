@@ -1,5 +1,7 @@
 import tensorflow as tf
 from tensorflow.keras import layers, models
+from tensorflow.keras import backend as K
+
 
 def classification_head(inputs, n_classes, dropout=0.2):
     x = layers.GlobalAveragePooling2D()(inputs)
@@ -49,11 +51,24 @@ BACKBONES = {
 }
 
 def build_transfer_model(name, input_shape, n_classes, train_base=False, dropout=0.2):
+    K.set_image_data_format("channels_last")
+    h, w = input_shape[:2]
+    input_shape_3c = (h, w, 3) # ensure 3 channels
     cfg = BACKBONES[name]
-    base = cfg["builder"](input_shape=input_shape, **cfg["kwargs"])
-    base.trainable = train_base
-    inputs = tf.keras.Input(shape=input_shape)
+    # Our 3-channel input
+    h, w = input_shape[:2]
+    inputs = tf.keras.Input(shape=(h, w, 3), name=f"{name}_input")
+    # Preprocess as part of the graph
     x = cfg["preprocess"](inputs)
-    x = base(x, training=False)
-    outputs = classification_head(x, n_classes, dropout=dropout)
-    return models.Model(inputs, outputs, name=f"{name}_tl"), cfg["preprocess"]
+    base = cfg["builder"](input_shape=input_shape_3c, **cfg["kwargs"])
+    base.trainable = train_base
+
+    inputs = tf.keras.Input(shape=input_shape_3c)
+    x = cfg["preprocess"](inputs)
+    # Build the backbone by attaching it to our tensor (forces 3ch)
+    base = cfg["builder"](input_tensor=x, include_top=False, weights="imagenet")
+    base.trainable = train_base
+
+    outputs = classification_head(base.output, n_classes, dropout=dropout)
+    model = models.Model(inputs, outputs, name=f"{name}_tl")
+    return model, cfg["preprocess"]

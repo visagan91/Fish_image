@@ -16,7 +16,7 @@ os.makedirs(OUT_DIR, exist_ok=True)
 
 def make_gens(img_size=IMG_SIZE):
     train_datagen = ImageDataGenerator(
-        rescale=1./255,
+        #rescale=1./255,
         rotation_range=20,
         width_shift_range=0.1,
         height_shift_range=0.1,
@@ -25,16 +25,16 @@ def make_gens(img_size=IMG_SIZE):
         horizontal_flip=True,
         fill_mode="nearest"
     )
-    val_datagen = ImageDataGenerator(rescale=1./255)
+    val_datagen = ImageDataGenerator()# no (rescale=1./255)
 
     # in src/train.py (make_gens)
     train_gen = train_datagen.flow_from_directory(
     TRAIN_DIR, target_size=img_size, batch_size=BATCH_SIZE,
-    class_mode="categorical", shuffle=True, color_mode="rgb"   # <— add this
+    class_mode="categorical", shuffle=True, color_mode="rgb"   # <— EffiecientNet fixx
 )
     val_gen = val_datagen.flow_from_directory(
     VAL_DIR, target_size=img_size, batch_size=BATCH_SIZE,
-    class_mode="categorical", shuffle=False, color_mode="rgb"  # <— add this
+    class_mode="categorical", shuffle=False, color_mode="rgb"  # <— EffNet fix
 )
 
     return train_gen, val_gen
@@ -54,7 +54,7 @@ def compile_fit(model, train_gen, val_gen, epochs, out_path):
 def run_all():
     train_gen, val_gen = make_gens()
     n_classes = train_gen.num_classes
-    input_shape = (*train_gen.target_size, 3)
+    input_shape = (*IMG_SIZE, 3)
 
     # save label map
     class_indices = train_gen.class_indices
