@@ -43,11 +43,11 @@ BACKBONES = {
         "preprocess": tf.keras.applications.inception_v3.preprocess_input,
         "kwargs": {"weights":"imagenet", "include_top":False}
     },
-    "EfficientNetB0": {
-        "builder": tf.keras.applications.EfficientNetB0,
-        "preprocess": tf.keras.applications.efficientnet.preprocess_input,
-        "kwargs": {"weights":"imagenet", "include_top":False}
-    },
+    #"EfficientNetB0": {
+    #    "builder": tf.keras.applications.EfficientNetB0,
+    #   "preprocess": tf.keras.applications.efficientnet.preprocess_input,
+    #    "kwargs": {"weights":"imagenet", "include_top":False}
+    #},
 }
 
 def build_transfer_model(name, input_shape, n_classes, train_base=False, dropout=0.2):
